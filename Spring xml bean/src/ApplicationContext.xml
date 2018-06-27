@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans">
+
+	<!-- default constructor -->
+<!-- 	<bean id="simpleUser" class="com.spring.application.entity.User"/> -->
+
+
+
+
+	<!-- simple transaction -->
+
+	<bean id="simpleTransaction" class="com.spring.application.entity.Transaction"></bean>
+
+	<!-- inserting date -->
+	<bean id="dateFormat" class="java.text.SimpleDateFormat">
+		<constructor-arg value="dd/MM/yyyy" />
+	</bean>
+
+	<bean id="date" factory-bean="dateFormat" factory-method="parse">
+		<constructor-arg value="20/11/1993" />
+	</bean>
+
+
+	<!-- simpleTransactionparam -->
+
+	<bean id="simpleParamTransaction" class="com.spring.application.entity.Transaction">
+		<constructor-arg value="1"></constructor-arg>
+		<constructor-arg value="MCD"></constructor-arg>
+		<constructor-arg ref="date" type="java.util.Date"></constructor-arg>
+		<constructor-arg value="19992.50"></constructor-arg>
+	</bean>
+
+
+	<!-- date in propper format -->
+	<bean id="stringDate" factory-bean="dateFormat" factory-method="format">
+		<constructor-arg ref="date">
+		</constructor-arg>
+
+	</bean>
+
+	<!-- paramConstructor -->
+
+	<bean id="simpleParamUser" class="com.spring.application.entity.User" autowire-candidate="false">
+
+		<constructor-arg name="name" value="Pretham"></constructor-arg>
+		<constructor-arg name="customerTransactions">
+			<list>
+				<ref bean="simpleTransaction"></ref>
+			</list>
+		</constructor-arg>
+		<constructor-arg name="password">
+			<map>
+				<entry key="Pretham" value="ABC123" value-type="java.lang.String"></entry>
+			</map>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="simpleUser" class="com.spring.application.entity.User" >
+
+		<constructor-arg name="name" value="Pretham"></constructor-arg>
+		<constructor-arg name="customerTransactions">
+		<null></null>
+		</constructor-arg>
+		<constructor-arg name="password">
+		<null></null>		</constructor-arg>
+	</bean>
+<!-- 	creating a jiooffice bean -->
+
+
+<bean id="jioOfficeSimple" class="com.spring.application.entity.JioOffice" scope="prototype">
+<constructor-arg ref="simpleParamUser"></constructor-arg>
+</bean>
+
+
+<!-- autowiring by name -->
+
+
+<bean id="jioOffice" class="com.spring.application.entity.JioOffice" autowire="byName"/>
+
+<bean id="jioAutoTypeOffice" class="com.spring.application.entity.JioOffice" autowire="byType"/>
+
+
+<!-- autowiring by constructor -->
+
+<bean id="jioAutoConstructor" class="com.spring.application.entity.JioOffice" autowire="constructor"></bean>
+
+
+</beans>
